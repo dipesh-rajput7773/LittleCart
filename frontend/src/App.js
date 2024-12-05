@@ -7,7 +7,7 @@ function App() {
   return (
     <>
     <Provider store={store}>
-    <BrowserRouter>
+     <BrowserRouter>
         <Routing />
         <App/>
       </BrowserRouter>
