@@ -9,6 +9,7 @@ function App() {
     <Provider store={store}>
     <BrowserRouter>
         <Routing />
+        <App/>
       </BrowserRouter>
     </Provider>
    
