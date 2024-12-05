@@ -1,0 +1,10 @@
+# Backend ignores
+backend/node_modules/
+backend/.env
+
+# Frontend ignores
+frontend/node_modules/
+frontend/.env
+
+# Optional: Ignore log files for both
+**/*.log
