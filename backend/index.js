@@ -10,6 +10,8 @@ const  User  = require("./models/user");
 app.use(cors());
 app.use(express.json());
 
+console.log('testing')
+
 
 sequelize
   .sync({ force: false })
