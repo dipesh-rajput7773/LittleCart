@@ -65,5 +65,12 @@ const login = async (req, res) => {
   }
 };
 
+// verify token
 
-module.exports = { register,login };
+const verifyToken = async (req,res)=>{
+  res.json({msg:"user authenticated"})
+}
+
+
+
+module.exports = { register,login,verifyToken };
