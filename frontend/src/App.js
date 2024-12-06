@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import Routing from "./Routing";
 import store from "./redux/store";
 function App() {
-  console.log('testing')
+
   return (
     <>
     <Provider store={store}>

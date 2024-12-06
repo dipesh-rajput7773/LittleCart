@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom"; 
+import { Routes, Route, Navigate } from "react-router-dom";
 import UserBaseRoute from "./UserBaseRoute";
 import AdminBaseRoute from "./AdminBaseRoute";
 import AdminRegister from "./pages/admin/auth/AdminRegister";
@@ -7,7 +7,7 @@ import AdminLogin from "./pages/admin/auth/AdminLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setLoggedIn } from "./redux/slice/authSlice";
 import AdminDashboardHome from "./pages/admin/dashboard/AdminDashboardHome";
-
+import axiosInstance from "./services/axiosInstance";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -20,20 +20,21 @@ const PrivateRoute = ({ children }) => {
 function Routing() {
   const dispatch = useDispatch();
 
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-
+  const verifyToken = async () => {
+    if (isAuthenticated()) {
+      try {
+        await axiosInstance.get("/user/verifyadmin");
+        dispatch(setLoggedIn(true));
+      } catch (error) {
+        dispatch(setLoggedIn(false));
+        dispatch(logout());
+      }
+    }
+  };
 
   useEffect(() => {
-   
-    const token = localStorage.getItem("token"); // Or use any other logic to check login status
-    if (token) {
-      dispatch(setLoggedIn()); // Dispatch action to set logged in if token exists
-    } else {
-      dispatch(logout()); // Dispatch action to set logged out if no token
-    }
-  }, [dispatch]);
-
+    verifyToken()
+  }, []);
 
   return (
     <Routes>
@@ -59,7 +60,7 @@ function Routing() {
           </PrivateRoute>
         }
       >
-        <Route index element={<AdminDashboardHome/>} /> {/* Default Route */}
+        <Route index element={<AdminDashboardHome />} /> {/* Default Route */}
         <Route path="products" element={<h1>AdminProductManagement</h1>} />
       </Route>
 
