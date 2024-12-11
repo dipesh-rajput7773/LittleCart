@@ -4,11 +4,13 @@ import {
   Button,
   Box,
   Typography,
-  Grid2,
+  Grid,
   Container,
   Paper,
+  Link,
+  Divider,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // For routing
+import { useNavigate } from "react-router-dom";
 import { LoginAdmin } from "../../../services/api";
 
 const AdminLogin = () => {
@@ -45,28 +47,19 @@ const AdminLogin = () => {
     // Clear the error if validation is passed
     setError("");
 
-    console.log("formData:", formData);
-
     const payload = {
       email: formData.email,
       password: formData.password,
-      // role: "admin", // Static role set as 'admin'
     };
 
     try {
       const response = await LoginAdmin(payload);
-     
-      console.log("Admin Logged In:", response);
-
-      localStorage.setItem("token",response.token)
-    
-      navigate("/admin"); // Change this to the correct route after login
+      localStorage.setItem("token", response.token);
+      navigate("/admin"); // Navigate to the admin dashboard after login
     } catch (err) {
-        console.error("Error logging in:", err);
       setError("An error occurred. Please try again later.");
     }
   };
-
 
   return (
     <Container
@@ -76,7 +69,7 @@ const AdminLogin = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        // backgroundColor: "#f0f4f8",
+        backgroundColor: "#f4f6f9", // Light background for the page
       }}
     >
       <Paper
@@ -100,9 +93,9 @@ const AdminLogin = () => {
           Admin Login
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Grid2 container spacing={3}>
+          <Grid container spacing={3}>
             {/* Email Field */}
-            <Grid2 item xs={12}>
+            <Grid item xs={12}>
               <TextField
                 label="Email"
                 variant="outlined"
@@ -114,10 +107,10 @@ const AdminLogin = () => {
                 type="email"
                 sx={{ marginBottom: 2 }}
               />
-            </Grid2>
+            </Grid>
 
             {/* Password Field */}
-            <Grid2 item xs={12}>
+            <Grid item xs={12}>
               <TextField
                 label="Password"
                 variant="outlined"
@@ -129,19 +122,19 @@ const AdminLogin = () => {
                 type="password"
                 sx={{ marginBottom: 2 }}
               />
-            </Grid2>
+            </Grid>
 
             {/* Error Message */}
             {error && (
-              <Grid2 item xs={12}>
+              <Grid item xs={12}>
                 <Typography color="error" sx={{ textAlign: "center" }}>
                   {error}
                 </Typography>
-              </Grid2>
+              </Grid>
             )}
 
             {/* Submit Button */}
-            <Grid2 item xs={12}>
+            <Grid item xs={12}>
               <Button
                 type="submit"
                 variant="contained"
@@ -158,8 +151,44 @@ const AdminLogin = () => {
               >
                 Login
               </Button>
-            </Grid2>
-          </Grid2>
+            </Grid>
+
+            {/* Divider */}
+            <Grid item xs={12}>
+              <Divider sx={{ marginY: 2 }} />
+            </Grid>
+
+            {/* Register and Forgot Password Links */}
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <Typography variant="body2">
+                Don't have an account?{" "}
+                <Link
+                  href="/register"
+                  sx={{
+                    color: "#1976d2",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                >
+                  Register
+                </Link>
+              </Typography>
+              <Typography variant="body2" sx={{ marginTop: 1 }}>
+                <Link
+                  href="/forgot-password"
+                  sx={{
+                    color: "#1976d2",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                >
+                  Forgot Password?
+                </Link>
+              </Typography>
+            </Grid>
+          </Grid>
         </form>
       </Paper>
     </Container>

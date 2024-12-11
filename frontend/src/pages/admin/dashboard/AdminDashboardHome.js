@@ -20,7 +20,6 @@ function AdminDashboardHome() {
         <Typography variant="h4" sx={{ marginBottom: "24px" }}>
           Welcome to the Admin Dashboard
         </Typography>
-
         {/* Dashboard Overview Grid2 */}
         <Grid2 container spacing={3}>
           {/* Total Users Card */}

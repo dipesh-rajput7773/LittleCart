@@ -1,9 +1,10 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../_db");
+// models/category.js
+const { DataTypes } = require('sequelize');
+const sequelize = require('../_db'); 
+const Product = require('./Product')
 
-const Category = sequelize.define(
-  "category",
-  {
+
+  const Category = sequelize.define('Category', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,13 +12,21 @@ const Category = sequelize.define(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false, // Category name is required
-      unique: true, // Category name should be unique
+      allowNull: false,
     },
-  },
-  {
-    timestamps: true,
-  }
-);
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    img: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  });
 
-module.exports = Category;
+  
+
+
+  module.exports = Category
+
+

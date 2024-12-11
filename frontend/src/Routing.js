@@ -14,7 +14,7 @@ const isAuthenticated = () => {
 };
 
 const PrivateRoute = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/adminauth/login" />;
+  return isAuthenticated() ? children : <Navigate to="/register" />;
 };
 
 function Routing() {
@@ -38,7 +38,14 @@ function Routing() {
 
   return (
     <Routes>
+      
+      <Route path="register" element={<AdminRegister />} />
+      <Route path="login" element={<AdminLogin />} />
+
+
       {/* User Routes */}
+
+
       <Route path="/" element={<UserBaseRoute />}>
         <Route index element={<h1>HomePage</h1>} /> {/* Default Route */}
         <Route path="products" element={<h1>Productpage</h1>} />
@@ -47,10 +54,6 @@ function Routing() {
 
       {/* Admin Routes */}
 
-      <Route path="/adminauth">
-        <Route path="register" element={<AdminRegister />} />
-        <Route path="login" element={<AdminLogin />} />
-      </Route>
 
       <Route
         path="/admin"

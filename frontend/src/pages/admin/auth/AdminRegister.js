@@ -7,9 +7,10 @@ import {
   Grid2,
   Container,
   Paper,
+  Link,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../../services/axiosInstance";
 import { CreateAdmin } from "../../../services/api";
 
 const AdminRegister = () => {
@@ -43,18 +44,16 @@ const AdminRegister = () => {
     setError("");
 
     try {
-        console.log("Admin Registered:", formData);
-        const payload = {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            role: "admin", // Static role set as 'admin'
-          };
-    
-      const response =  await CreateAdmin(payload);
-    //   console.log(response);
-    localStorage.setItem("token",response.token)
-      navigate("/admin"); 
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: "admin",
+      };
+
+      const response = await CreateAdmin(payload);
+      localStorage.setItem("token", response.token);
+      navigate("/admin");
     } catch (err) {
       setError("An error occurred. Please try again later.");
     }
@@ -68,7 +67,7 @@ const AdminRegister = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        // backgroundColor: "#f0f4f8",
+        backgroundColor: "#f4f6f9",
       }}
     >
       <Paper
@@ -179,6 +178,42 @@ const AdminRegister = () => {
               >
                 Register
               </Button>
+            </Grid2>
+
+            {/* Divider */}
+            <Grid2 item xs={12}>
+              <Divider sx={{ marginY: 2 }} />
+            </Grid2>
+
+            {/* Login and Forgot Password Links */}
+            <Grid2 item xs={12} sx={{ textAlign: "center" }}>
+              <Typography variant="body2">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  sx={{
+                    color: "#1976d2",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                >
+                  Login
+                </Link>
+              </Typography>
+              {/* <Typography variant="body2" sx={{ marginTop: 1 }}>
+                <Link
+                  href="/forgot-password"
+                  sx={{
+                    color: "#1976d2",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                >
+                  Forgot Password?
+                </Link>
+              </Typography> */}
             </Grid2>
           </Grid2>
         </form>
