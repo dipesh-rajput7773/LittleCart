@@ -1,11 +1,6 @@
-// models/Attribute.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../_db');
-const AttributeValue = require('./AttributeValue');
-const Product = require('./Product');
-const ProductAttributes = require('./ProductAttributes');
 
-// Define the Attribute model
 const Attribute = sequelize.define('Attribute', {
   id: {
     type: DataTypes.INTEGER,
@@ -16,10 +11,10 @@ const Attribute = sequelize.define('Attribute', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 });
 
-
-
-
-// Return the model
 module.exports = Attribute;

@@ -4,7 +4,7 @@ const Category = require("../models/Category");
 
 const createCategory = async (req, res) => {
     try {
-      const { name } = req.body;  
+      const { name,description,img } = req.body;  
       if (!name) {
         return res.status(400).json({ message: 'Category name is required' });
       }
@@ -13,10 +13,10 @@ const createCategory = async (req, res) => {
       if (existingCategory) {
         return res.status(400).json({ message: 'Category name must be unique' });
       }
-  
+      
       // Create a new category
       const newCategory = await Category.create({
-        name,
+        name,description,img
       });
   
       return res.status(201).json(newCategory); 

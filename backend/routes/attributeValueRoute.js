@@ -1,9 +1,9 @@
 const router = require('express').Router()
-const categoryCtrl = require('../controllers/categoryCtrl')
+const attributeValueCtrl = require('../controllers/attributeValueCtrl')
 const ensureAdminAuth = require('../middleware/ensureAdminAuth')
 
 
-router.post("/createcategory",categoryCtrl.createCategory)
+router.post("/createattributevalue",attributeValueCtrl.createAttributeValue)
 
 
 // router.post("/login",authCtrl.login)
