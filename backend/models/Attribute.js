@@ -15,6 +15,8 @@ const Attribute = sequelize.define('Attribute', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+},{
+  tableName: 'attributes' // Explicitly setting table name
 });
 
 module.exports = Attribute;

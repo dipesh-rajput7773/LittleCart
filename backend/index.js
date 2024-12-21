@@ -16,11 +16,6 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/user', require('./routes/authRoute'));
-app.use('/api', require('./routes/categoryRoute'));
-app.use('/api', require('./routes/attributeRoute'));
-app.use('/api', require('./routes/attributeValueRoute'));
-app.use('/api', require('./routes/productRoute'));
 
 
 app.get("/testprod", async (req, res) => {
@@ -90,6 +85,25 @@ Product.belongsTo(Category, {
   foreignKey: "categoryId",
 });
 
+
+Product.belongsToMany(Attribute, {
+  through: ProductAttribute,  // Junction table
+  foreignKey: "productId",
+});
+
+
+Attribute.belongsToMany(Product, {
+  through: ProductAttribute,
+  foreignKey: "attributeId",
+});
+
+
+Product.belongsToMany(AttributeValue, {
+  through: ProductAttributeValue,  // Junction table between Product and AttributeValue
+  foreignKey: "productId",
+});
+
+
 Attribute.hasMany(AttributeValue, {
   foreignKey: "attributeId",
 });
@@ -98,30 +112,22 @@ AttributeValue.belongsTo(Attribute, {
   foreignKey: "attributeId",
 });
 
-Product.belongsToMany(Attribute, {
-  through: ProductAttribute,
-  foreignKey: "productId",
-});
-
-Attribute.belongsToMany(Product, {
-  through: ProductAttribute,
-  foreignKey: "attributeId",
-});
-
-Product.belongsToMany(AttributeValue, {
-  through: ProductAttributeValue,
-  foreignKey: "productId",
-});
-
 AttributeValue.belongsToMany(Product, {
   through: ProductAttributeValue,
   foreignKey: "attributeValueId",
 });
 
+const fs = require('fs');
+const path = require('path');
 
+
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 sequelize
-  .sync({ force: false })
+  .sync({ alter: true })
   .then(() => {
     console.log('Database is connected');
     app.listen(port, () => {
@@ -137,3 +143,10 @@ app.get('/', async (req, res) => {
   res.send('EXPRESS IS RUNNING');
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/user', require('./routes/authRoute'));
+app.use('/api', require('./routes/categoryRoute'));
+app.use('/api', require('./routes/attributeRoute'));
+app.use('/api', require('./routes/attributeValueRoute'));
+app.use('/api', require('./routes/productRoute'));

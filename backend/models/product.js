@@ -21,6 +21,13 @@ const Product = sequelize.define('Product', {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
+  img: { 
+    type: DataTypes.STRING,  
+    allowNull: true, 
+  }
+},
+{
+  tableName: 'products' // Explicitly setting table name
 });
 
 

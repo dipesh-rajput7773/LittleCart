@@ -12,6 +12,8 @@ const ProductAttributeValue = sequelize.define(
   },
   {
     timestamps: false,
+  },{
+    tableName: 'productattributevalues' 
   }
 );
 

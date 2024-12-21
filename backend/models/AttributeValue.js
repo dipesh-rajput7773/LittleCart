@@ -12,6 +12,8 @@ const AttributeValue = sequelize.define('AttributeValue', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+},{
+  tableName: 'attributevalues' // Explicitly setting table name
 });
 
 
