@@ -1,8 +1,7 @@
+// models/Attribute.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../_db');
-const AttributeValue = require('./AttributeValue');
 
-// Define the Attribute model
 const Attribute = sequelize.define('Attribute', {
   id: {
     type: DataTypes.INTEGER,
@@ -20,30 +19,32 @@ const Attribute = sequelize.define('Attribute', {
   },
   createdAt: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW, 
   },
   updatedAt: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
   },
   deletedAt: {
     type: DataTypes.DATE,
-    allowNull: true, 
+    allowNull: true,
   },
 }, {
-  tableName: 'attributes', 
+  tableName: 'attributes',
   paranoid: true,
-  deletedAt: 'deletedAt', 
+  deletedAt: 'deletedAt',
   timestamps: true,
 });
 
-// Define associations
+
+// Define the association: AttributeValue belongs to Attribute
 Attribute.associate = (models) => {
-  // Attribute has many AttributeValue
-  Attribute.hasMany(AttributeValue, {
+  // Make sure `Attribute` is properly imported here
+  Attribute.hasMany(models.AttributeValue, {
     foreignKey: 'attribute_id',
-    as: 'attribute_values', // Alias for accessing associated AttributeValues
+    as: 'attribute_values',
   });
 };
 
+
+
+// Export the model for use in other files
 module.exports = Attribute;

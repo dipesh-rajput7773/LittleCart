@@ -1,8 +1,7 @@
+"use strict";
 const { DataTypes } = require('sequelize');
 const sequelize = require('../_db');
-const slugify = require('slugify');  // A useful package to generate slugs
 
-// Define the Category model
 const Category = sequelize.define('Category', {
   id: {
     type: DataTypes.INTEGER,
@@ -10,46 +9,57 @@ const Category = sequelize.define('Category', {
     autoIncrement: true,
   },
   name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255),
     allowNull: false,
-    unique: true, 
+    unique: true,
     validate: {
-      len: [3, 255], 
-    }
+      len: [3, 255],
+    },
   },
-  description: {
-    type: DataTypes.TEXT,
+  slug: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    unique: true,
+    validate: {
+      is: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    },
+  },
+  parent_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'categories',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+  },
+  short_content: {
+    type: DataTypes.STRING,
     allowNull: true,
   },
   img: {
     type: DataTypes.STRING,
-    allowNull: true, 
-  },
-  slug: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true, 
-    validate: {
-      is: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,  // Slug pattern
-    }
-  },
-  parentId: {
-    type: DataTypes.INTEGER,
     allowNull: true,
-    references: {
-      model: 'categories', 
-      key: 'id'
-    },
-    onDelete: 'CASCADE', 
+  },
+  featured: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
   },
   status: {
     type: DataTypes.ENUM('active', 'inactive', 'archived'),
-    defaultValue: 'active', 
+    defaultValue: 'active',
   },
-  order: {
-    type: DataTypes.INTEGER,
+  meta_title: {
+    type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: 0, 
+  },
+  meta_key: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  meta_description: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -59,42 +69,41 @@ const Category = sequelize.define('Category', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+  deletedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 }, {
-  tableName: 'categories', 
-  timestamps: true, 
-  paranoid: true, 
+  tableName: 'categories',
+  paranoid: true,
+  deletedAt: 'deletedAt',
+  timestamps: true,
   indexes: [
     {
+      name: 'name_unique',
+      unique: true,
+      fields: ['name'],
+      length: { name: 191 },  // Limit index to first 191 characters of 'name'
+    },
+    {
+      name: 'slug_unique',
       unique: true,
       fields: ['slug'],
-    },
+      length: { slug: 191 },  // Limit index to first 191 characters of 'slug'
+    }
   ],
 });
 
-// Add hook to auto-generate the slug if it's not provided
-Category.beforeCreate((category, options) => {
-  if (!category.slug) {
-    category.slug = slugify(category.name, { lower: true, strict: true }); // Auto-generate slug from name
-  }
-});
-
-Category.beforeUpdate((category, options) => {
-  if (!category.slug && category.name) {
-    category.slug = slugify(category.name, { lower: true, strict: true }); // Auto-update slug if name changes
-  }
-});
-
+// Define associations
 Category.associate = (models) => {
-  // One-to-many relationship with Product
-  Category.hasMany(models.Product, {
-    foreignKey: 'categoryId',
-    as: 'products', 
+  Category.belongsTo(models.Category, {
+    foreignKey: 'parent_id',
+    as: 'parent',  // Alias for the parent category
   });
 
-  // Self-association for hierarchical categories
-  Category.hasMany(Category, {
-    foreignKey: 'parentId',
-    as: 'subcategories',
+  Category.hasMany(models.Category, {
+    foreignKey: 'parent_id',
+    as: 'sub_categories',  // Alias for the sub-categories
   });
 };
 
